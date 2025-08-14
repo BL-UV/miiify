@@ -9,8 +9,8 @@ services:
       - "8080:10000"
       - "80:10000"
       - "443:10000"
-    #volumes:
-    #  - ./db:/home/miiify/db
+    volumes:
+     - ./db:/home/miiify/db
     restart: always
   pack:
     image: jptmoore/miiify:pack
