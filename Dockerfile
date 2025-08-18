@@ -1,7 +1,7 @@
 FROM ocaml/opam:alpine-ocaml-5.1 as build
 
 # Install system dependencies
-RUN sudo apk add --update libev-dev openssl-dev gmp-dev libffi-dev
+RUN sudo apk add --update libev-dev openssl-dev gmp-dev libffi-dev git
 ADD miiify .
 RUN opam install . --deps-only
 # Build project
@@ -12,7 +12,7 @@ FROM alpine as run
 
 RUN adduser miiify --disabled-password
 
-RUN apk add --update libev gmp openssl musl
+RUN apk add --update libev gmp openssl musl git
 
 WORKDIR /home/miiify
 
