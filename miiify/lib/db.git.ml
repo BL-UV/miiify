@@ -15,6 +15,8 @@ let create ~fname =
 
 let set ~db ~key ~data ~message =
   let* store = db in
+  let full_path = Filename.concat "/var/data/miiify-data" (String.concat "/" key) in
+  Printf.printf "Saving annotation to: %s\n%!" full_path;   
   Store.set_exn store key data ~info:(info message)
 
 let get ~db ~key =
