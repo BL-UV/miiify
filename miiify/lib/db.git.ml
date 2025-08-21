@@ -15,7 +15,23 @@ let create ~fname =
 
 let set ~db ~key ~data ~message =
   let* store = db in
-  Store.set_exn store key data ~info:(info message)
+
+  let full_path = Filename.concat "/var/data/miiify-data" (String.concat "/" key) in
+  Printf.printf "Attempting to save annotation to: %s\n%!" full_path;
+
+  try
+    let dir = Filename.dirname full_path in
+    if not (Sys.file_exists dir) then Unix.mkdir dir 0o775;
+
+    let oc = open_out full_path in
+    output_string oc data;
+    close_out oc;
+    Printf.printf "Saved annotation successfully: %s\n%!" full_path;
+
+    Store.set_exn store key data ~info:(info message)
+  with
+  | e -> Printf.printf "Error saving annotation: %s\n%!" (Printexc.to_string e)
+
 
 let get ~db ~key =
   let* store = db in
