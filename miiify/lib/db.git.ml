@@ -15,6 +15,20 @@ let create ~fname =
 
 let set ~db ~key ~data ~message =
   let* store = db in
+
+  (* Get repository path from env var, fallback if not set *)
+  let repo_path =
+    try Sys.getenv "REPOSITORY_NAME"
+    with Not_found -> "/var/data/miiify-data (env var not set)"
+  in
+
+  (* Construct full path for this annotation *)
+  let full_path = Filename.concat repo_path (String.concat "/" key) in
+
+  (* Print debug info *)
+  Printf.printf "Saving annotation to: %s\n%!" full_path;
+
+  (* Actually save *)
   Store.set_exn store key data ~info:(info message)
 
 let get ~db ~key =
